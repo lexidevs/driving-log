@@ -1,6 +1,6 @@
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import * as React from "react";
-import { View, StyleSheet, Share } from "react-native";
+import { View, StyleSheet, ScrollView } from "react-native";
 import {
     Button,
     Checkbox,
@@ -127,175 +127,187 @@ export default function ExportScreen() {
                     }}
                 />
             </Appbar.Header>
-            <View style={styles.container}>
-                {/* ability to export as different types (csv, pdf) */}
-                {/* radio to choose type */}
-                <View style={styles.flexRow}>
-                    <View style={{ flex: 1 }}>
-                        <List.Section title="Export Type">
-                            <RadioButton.Group
-                                onValueChange={(value) => setType(value)}
-                                value={type}
-                            >
-                                <RadioButton.Item label="CSV" value="csv" />
-                                <RadioButton.Item label="PDF" value="pdf" />
-                                <RadioButton.Item label="JSON" value="json" />
-                            </RadioButton.Group>
-                        </List.Section>
+            <ScrollView>
+                <View style={styles.container}>
+                    {/* ability to export as different types (csv, pdf) */}
+                    {/* radio to choose type */}
+                    <View style={styles.flexRow}>
+                        <View style={{ flex: 1 }}>
+                            <List.Section title="Export Type">
+                                <RadioButton.Group
+                                    onValueChange={(value) => setType(value)}
+                                    value={type}
+                                >
+                                    <RadioButton.Item label="CSV" value="csv" />
+                                    <RadioButton.Item label="PDF" value="pdf" />
+                                    <RadioButton.Item
+                                        label="JSON"
+                                        value="json"
+                                    />
+                                </RadioButton.Group>
+                            </List.Section>
+                        </View>
                     </View>
-                </View>
 
-                {/* ability to choose columns to export */}
-                <View style={styles.flexRow}>
-                    <View style={{ flex: 1 }}>
-                        <List.Section title="Columns">
-                            <Checkbox.Item
-                                label="Date"
-                                disabled={type === "json"}
-                                status={
-                                    columns.includes("Date")
-                                        ? "checked"
-                                        : "unchecked"
-                                }
-                                onPress={() => {
-                                    // TODO: abstract this into a function
-                                    if (columns.includes("Date")) {
-                                        setColumns(
-                                            columns.filter(
-                                                (col) => col !== "Date"
-                                            )
-                                        );
-                                    } else {
-                                        setColumns([...columns, "Date"]);
+                    {/* ability to choose columns to export */}
+                    <View style={styles.flexRow}>
+                        <View style={{ flex: 1 }}>
+                            <List.Section title="Columns">
+                                <Checkbox.Item
+                                    label="Date"
+                                    disabled={type === "json"}
+                                    status={
+                                        columns.includes("Date")
+                                            ? "checked"
+                                            : "unchecked"
                                     }
-                                }}
-                            />
-                            <Checkbox.Item
-                                label="Start Time"
-                                disabled={type === "json"}
-                                status={
-                                    columns.includes("Start Time")
-                                        ? "checked"
-                                        : "unchecked"
-                                }
-                                onPress={() => {
-                                    if (columns.includes("Start Time")) {
-                                        setColumns(
-                                            columns.filter(
-                                                (col) => col !== "Start Time"
-                                            )
-                                        );
-                                    } else {
-                                        setColumns([...columns, "Start Time"]);
+                                    onPress={() => {
+                                        // TODO: abstract this into a function
+                                        if (columns.includes("Date")) {
+                                            setColumns(
+                                                columns.filter(
+                                                    (col) => col !== "Date"
+                                                )
+                                            );
+                                        } else {
+                                            setColumns([...columns, "Date"]);
+                                        }
+                                    }}
+                                />
+                                <Checkbox.Item
+                                    label="Start Time"
+                                    disabled={type === "json"}
+                                    status={
+                                        columns.includes("Start Time")
+                                            ? "checked"
+                                            : "unchecked"
                                     }
-                                }}
-                            />
-                            <Checkbox.Item
-                                label="End Time"
-                                disabled={type === "json"}
-                                status={
-                                    columns.includes("End Time")
-                                        ? "checked"
-                                        : "unchecked"
-                                }
-                                onPress={() => {
-                                    if (columns.includes("End Time")) {
-                                        setColumns(
-                                            columns.filter(
-                                                (col) => col !== "End Time"
-                                            )
-                                        );
-                                    } else {
-                                        setColumns([...columns, "End Time"]);
+                                    onPress={() => {
+                                        if (columns.includes("Start Time")) {
+                                            setColumns(
+                                                columns.filter(
+                                                    (col) =>
+                                                        col !== "Start Time"
+                                                )
+                                            );
+                                        } else {
+                                            setColumns([
+                                                ...columns,
+                                                "Start Time",
+                                            ]);
+                                        }
+                                    }}
+                                />
+                                <Checkbox.Item
+                                    label="End Time"
+                                    disabled={type === "json"}
+                                    status={
+                                        columns.includes("End Time")
+                                            ? "checked"
+                                            : "unchecked"
                                     }
-                                }}
-                            />
-                            <Checkbox.Item
-                                label="Length"
-                                disabled={type === "json"}
-                                status={
-                                    columns.includes("Length")
-                                        ? "checked"
-                                        : "unchecked"
-                                }
-                                onPress={() => {
-                                    if (columns.includes("Length")) {
-                                        setColumns(
-                                            columns.filter(
-                                                (col) => col !== "Length"
-                                            )
-                                        );
-                                    } else {
-                                        setColumns([...columns, "Length"]);
+                                    onPress={() => {
+                                        if (columns.includes("End Time")) {
+                                            setColumns(
+                                                columns.filter(
+                                                    (col) => col !== "End Time"
+                                                )
+                                            );
+                                        } else {
+                                            setColumns([
+                                                ...columns,
+                                                "End Time",
+                                            ]);
+                                        }
+                                    }}
+                                />
+                                <Checkbox.Item
+                                    label="Length"
+                                    disabled={type === "json"}
+                                    status={
+                                        columns.includes("Length")
+                                            ? "checked"
+                                            : "unchecked"
                                     }
-                                }}
-                            />
-                            <Checkbox.Item
-                                label="Day"
-                                disabled={type === "json"}
-                                status={
-                                    columns.includes("Day")
-                                        ? "checked"
-                                        : "unchecked"
-                                }
-                                onPress={() => {
-                                    if (columns.includes("Day")) {
-                                        setColumns(
-                                            columns.filter(
-                                                (col) => col !== "Day"
-                                            )
-                                        );
-                                    } else {
-                                        setColumns([...columns, "Day"]);
+                                    onPress={() => {
+                                        if (columns.includes("Length")) {
+                                            setColumns(
+                                                columns.filter(
+                                                    (col) => col !== "Length"
+                                                )
+                                            );
+                                        } else {
+                                            setColumns([...columns, "Length"]);
+                                        }
+                                    }}
+                                />
+                                <Checkbox.Item
+                                    label="Day"
+                                    disabled={type === "json"}
+                                    status={
+                                        columns.includes("Day")
+                                            ? "checked"
+                                            : "unchecked"
                                     }
-                                }}
-                            />
-                            <Checkbox.Item
-                                label="Weather"
-                                disabled={type === "json"}
-                                status={
-                                    columns.includes("Weather")
-                                        ? "checked"
-                                        : "unchecked"
-                                }
-                                onPress={() => {
-                                    if (columns.includes("Weather")) {
-                                        setColumns(
-                                            columns.filter(
-                                                (col) => col !== "Weather"
-                                            )
-                                        );
-                                    } else {
-                                        setColumns([...columns, "Weather"]);
+                                    onPress={() => {
+                                        if (columns.includes("Day")) {
+                                            setColumns(
+                                                columns.filter(
+                                                    (col) => col !== "Day"
+                                                )
+                                            );
+                                        } else {
+                                            setColumns([...columns, "Day"]);
+                                        }
+                                    }}
+                                />
+                                <Checkbox.Item
+                                    label="Weather"
+                                    disabled={type === "json"}
+                                    status={
+                                        columns.includes("Weather")
+                                            ? "checked"
+                                            : "unchecked"
                                     }
-                                }}
-                            />
-                            <Checkbox.Item
-                                label="Notes"
-                                disabled={type === "json"}
-                                status={
-                                    columns.includes("Notes")
-                                        ? "checked"
-                                        : "unchecked"
-                                }
-                                onPress={() => {
-                                    if (columns.includes("Notes")) {
-                                        setColumns(
-                                            columns.filter(
-                                                (col) => col !== "Notes"
-                                            )
-                                        );
-                                    } else {
-                                        setColumns([...columns, "Notes"]);
+                                    onPress={() => {
+                                        if (columns.includes("Weather")) {
+                                            setColumns(
+                                                columns.filter(
+                                                    (col) => col !== "Weather"
+                                                )
+                                            );
+                                        } else {
+                                            setColumns([...columns, "Weather"]);
+                                        }
+                                    }}
+                                />
+                                <Checkbox.Item
+                                    label="Notes"
+                                    disabled={type === "json"}
+                                    status={
+                                        columns.includes("Notes")
+                                            ? "checked"
+                                            : "unchecked"
                                     }
-                                }}
-                            />
-                        </List.Section>
+                                    onPress={() => {
+                                        if (columns.includes("Notes")) {
+                                            setColumns(
+                                                columns.filter(
+                                                    (col) => col !== "Notes"
+                                                )
+                                            );
+                                        } else {
+                                            setColumns([...columns, "Notes"]);
+                                        }
+                                    }}
+                                />
+                            </List.Section>
+                        </View>
                     </View>
-                </View>
 
-                {/* TODO: add ability to choose date range */}
-            </View>
+                    {/* TODO: add ability to choose date range */}
+                </View>
+            </ScrollView>
         </>
     );
 }
