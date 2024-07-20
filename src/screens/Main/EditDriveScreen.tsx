@@ -13,7 +13,6 @@ import {
     Checkbox,
     TextInput,
     Text,
-    FAB,
     Appbar,
     SegmentedButtons,
     Chip,
@@ -75,6 +74,28 @@ export default function EditDriveScreen({
             <Appbar.Header>
                 <Appbar.BackAction onPress={() => navigation.goBack()} />
                 <Appbar.Content title="Edit drive" />
+                <Appbar.Action icon="delete" onPress={() => alert("Delete")} />
+                <Appbar.Action
+                    icon="content-save"
+                    onPress={() => {
+                        AsyncStorage.getItem("drives").then((value) => {
+                            let drives = JSON.parse(value ? value : "[]");
+                            drives[route.params.index] = {
+                                startDate: startDate.toISOString(),
+                                endDate: endDate.toISOString(),
+                                day: day,
+                                weather: weather,
+                                notes: notes,
+                            };
+                            // alert(JSON.stringify(drives));
+                            AsyncStorage.setItem(
+                                "drives",
+                                JSON.stringify(drives)
+                            );
+                            navigation.goBack();
+                        });
+                    }}
+                />
             </Appbar.Header>
 
             {/* start time picker */}
@@ -287,26 +308,6 @@ export default function EditDriveScreen({
                     />
                 </View>
             </ScrollView>
-
-            <FAB
-                style={styles.fab}
-                icon="content-save"
-                onPress={() =>
-                    AsyncStorage.getItem("drives").then((value) => {
-                        let drives = JSON.parse(value ? value : "[]");
-                        drives[route.params.index] = {
-                            startDate: startDate.toISOString(),
-                            endDate: endDate.toISOString(),
-                            day: day,
-                            weather: weather,
-                            notes: notes,
-                        };
-                        // alert(JSON.stringify(drives));
-                        AsyncStorage.setItem("drives", JSON.stringify(drives));
-                        navigation.goBack();
-                    })
-                }
-            />
         </>
     );
 }
@@ -338,12 +339,6 @@ const styles = StyleSheet.create({
         flexDirection: "column",
         alignItems: "center",
         height: "100%",
-    },
-    fab: {
-        position: "absolute",
-        margin: 16,
-        right: 0,
-        bottom: 0,
     },
     pressableStyle: {
         margin: 6,
