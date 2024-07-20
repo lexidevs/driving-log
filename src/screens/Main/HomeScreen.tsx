@@ -55,8 +55,7 @@ type HomeScreenProps = StackScreenProps<HomeStackParamList, "Home">;
 function HomeScreen({ navigation }: HomeScreenProps) {
     const [drives, setDrives] = React.useState<DriveProps[]>([]);
     AsyncStorage.getItem("drives").then((value) => {
-        if (!value) return;
-        setDrives(JSON.parse(value));
+        setDrives(JSON.parse(value ?? "[]"));
     });
 
     const renderDrive = ({
