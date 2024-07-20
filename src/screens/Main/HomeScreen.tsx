@@ -45,7 +45,7 @@ type HomeStackParamList = {
         notes?: string;
         lengthString: string;
     };
-    EditDrive: { drive: DriveProps, index: number };
+    EditDrive: { drive: DriveProps; index: number };
 };
 
 const HomeStack = createStackNavigator<HomeStackParamList>();
@@ -88,7 +88,10 @@ function HomeScreen({ navigation }: HomeScreenProps) {
                             <View key={index}>
                                 <TouchableRipple
                                     onPress={() =>
-                                        navigation.navigate("EditDrive", { drive, index })
+                                        navigation.navigate("EditDrive", {
+                                            drive,
+                                            index,
+                                        })
                                     }
                                 >
                                     <List.Item
@@ -105,7 +108,7 @@ function HomeScreen({ navigation }: HomeScreenProps) {
                                         )}
                                     />
                                 </TouchableRipple>
-                                <Divider />
+                                {index < drives.length - 1 && <Divider />}
                             </View>
                         );
                     })}
