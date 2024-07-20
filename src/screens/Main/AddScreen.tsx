@@ -1,5 +1,5 @@
 import * as React from "react";
-import { View, StyleSheet } from "react-native";
+import { View, StyleSheet, ScrollView } from "react-native";
 import {
     Button,
     Checkbox,
@@ -40,39 +40,42 @@ export default function AddScreen({ navigation }: AddScreenProps) {
                     onPress={() => navigation.navigate("Home")}
                 />
                 <Appbar.Content title="Add a previous drive" />
-                <Appbar.Action icon="check" onPress={() => {
-                    // Save the drive
-                    AsyncStorage.getItem("drives").then((value) => {
-                        // TODO: potential race condition?? unsure
-                        // TODO: add validation
-                        let exportedStartDate = new Date(startDate);
-                        let exportedEndDate = new Date(endDate);
+                <Appbar.Action
+                    icon="check"
+                    onPress={() => {
+                        // Save the drive
+                        AsyncStorage.getItem("drives").then((value) => {
+                            // TODO: potential race condition?? unsure
+                            // TODO: add validation
+                            let exportedStartDate = new Date(startDate);
+                            let exportedEndDate = new Date(endDate);
 
-                        exportedStartDate.setSeconds(0);
-                        exportedStartDate.setMilliseconds(0);
-                        exportedEndDate.setSeconds(0);
-                        exportedEndDate.setMilliseconds(0);
+                            exportedStartDate.setSeconds(0);
+                            exportedStartDate.setMilliseconds(0);
+                            exportedEndDate.setSeconds(0);
+                            exportedEndDate.setMilliseconds(0);
 
-
-                        let drives = [];
-                        if (value) {
-                            drives = JSON.parse(value);
-                        }
-                        drives.push({
-                            startDate: exportedStartDate.toISOString(),
-                            endDate: exportedEndDate.toISOString(),
-                            day,
-                            weather,
-                            notes,
+                            let drives = [];
+                            if (value) {
+                                drives = JSON.parse(value);
+                            }
+                            drives.push({
+                                startDate: exportedStartDate.toISOString(),
+                                endDate: exportedEndDate.toISOString(),
+                                day,
+                                weather,
+                                notes,
+                            });
+                            AsyncStorage.setItem(
+                                "drives",
+                                JSON.stringify(drives)
+                            );
                         });
-                        AsyncStorage.setItem("drives", JSON.stringify(drives));
-                    });
-                    navigation.navigate("Home");
-                }} />
+                        navigation.navigate("Home");
+                    }}
+                />
             </Appbar.Header>
 
-
-            
             {/* Time picker */}
             {/* TODO: add ability to start drive on one day and end on another (going past midnight) */}
             <TimePickerModal
@@ -105,8 +108,7 @@ export default function AddScreen({ navigation }: AddScreenProps) {
                 locale="en"
             />
 
-            <View style={styles.formContainer}>
-                <View style={styles.container}>
+            <ScrollView contentContainerStyle={styles.formContainer}>
                     <View style={styles.inputRow}>
                         <DatePickerInput
                             style={styles.inputMargins}
@@ -265,8 +267,7 @@ export default function AddScreen({ navigation }: AddScreenProps) {
                             }}
                         />
                     </View>
-                </View>
-            </View>
+            </ScrollView>
         </>
     );
 }
@@ -278,6 +279,7 @@ const styles = StyleSheet.create({
     notesContainer: {
         flex: 1, // Take up all available space on main axis (vertical)
         width: "100%", // Take up all available space on cross axis (horizontal)
+        minHeight: 150,
     },
     notes: {
         marginTop: 6,
@@ -285,14 +287,6 @@ const styles = StyleSheet.create({
         marginHorizontal: 12,
         // Take up all available space on main axis (vertical)
         flex: 1,
-    },
-    container: {
-        flex: 1,
-        flexDirection: "column",
-        justifyContent: "center",
-        alignItems: "center",
-        height: "100%",
-        width: "100%",
     },
     smallTextInput: {
         flexGrow: 1,
@@ -314,7 +308,7 @@ const styles = StyleSheet.create({
         width: "100%",
     },
     formContainer: {
-        flex: 1,
+        flexGrow: 1,
         justifyContent: "center",
         alignItems: "center",
         width: "100%",
