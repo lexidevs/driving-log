@@ -74,7 +74,20 @@ export default function EditDriveScreen({
             <Appbar.Header>
                 <Appbar.BackAction onPress={() => navigation.goBack()} />
                 <Appbar.Content title="Edit drive" />
-                <Appbar.Action icon="delete" onPress={() => alert("Delete")} />
+                <Appbar.Action
+                    icon="delete"
+                    onPress={() => {
+                        AsyncStorage.getItem("drives").then((value) => {
+                            let drives = JSON.parse(value ? value : "[]");
+                            drives.splice(route.params.index, 1);
+                            AsyncStorage.setItem(
+                                "drives",
+                                JSON.stringify(drives)
+                            );
+                            navigation.goBack();
+                        });
+                    }}
+                />
                 <Appbar.Action
                     icon="content-save"
                     onPress={() => {
@@ -87,7 +100,6 @@ export default function EditDriveScreen({
                                 weather: weather,
                                 notes: notes,
                             };
-                            // alert(JSON.stringify(drives));
                             AsyncStorage.setItem(
                                 "drives",
                                 JSON.stringify(drives)
