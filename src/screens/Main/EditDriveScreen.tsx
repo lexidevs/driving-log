@@ -6,6 +6,7 @@ import {
     KeyboardAvoidingView,
     Animated,
     TouchableWithoutFeedback,
+    ScrollView,
 } from "react-native";
 import {
     Button,
@@ -128,8 +129,7 @@ export default function EditDriveScreen({
                 date={startDate}
                 presentationStyle="pageSheet"
             />
-
-            <View style={styles.container}>
+            <ScrollView contentContainerStyle={styles.container}>
                 {/* Heading for drive length */}
                 <Text variant="headlineLarge" style={{ marginVertical: 12 }}>
                     {`${Math.floor(
@@ -286,30 +286,27 @@ export default function EditDriveScreen({
                         }}
                     />
                 </View>
+            </ScrollView>
 
-                <FAB
-                    style={styles.fab}
-                    icon="content-save"
-                    onPress={() =>
-                        AsyncStorage.getItem("drives").then((value) => {
-                            let drives = JSON.parse(value ? value : "[]");
-                            drives[route.params.index] = {
-                                startDate: startDate.toISOString(),
-                                endDate: endDate.toISOString(),
-                                day: day,
-                                weather: weather,
-                                notes: notes,
-                            };
-                            // alert(JSON.stringify(drives));
-                            AsyncStorage.setItem(
-                                "drives",
-                                JSON.stringify(drives)
-                            );
-                            navigation.goBack();
-                        })
-                    }
-                />
-            </View>
+            <FAB
+                style={styles.fab}
+                icon="content-save"
+                onPress={() =>
+                    AsyncStorage.getItem("drives").then((value) => {
+                        let drives = JSON.parse(value ? value : "[]");
+                        drives[route.params.index] = {
+                            startDate: startDate.toISOString(),
+                            endDate: endDate.toISOString(),
+                            day: day,
+                            weather: weather,
+                            notes: notes,
+                        };
+                        // alert(JSON.stringify(drives));
+                        AsyncStorage.setItem("drives", JSON.stringify(drives));
+                        navigation.goBack();
+                    })
+                }
+            />
         </>
     );
 }
@@ -328,6 +325,7 @@ const styles = StyleSheet.create({
     notesContainer: {
         flex: 1, // Take up all available space on main axis (vertical)
         width: "100%", // Take up all available space on cross axis (horizontal)
+        minHeight: 150, // Minimum height of 150, applicable on small screens
     },
     notes: {
         // This will be inside the notesContainer, but it has the same effect
