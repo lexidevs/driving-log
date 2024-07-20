@@ -62,7 +62,10 @@ export default function AddScreen({ navigation }: AddScreenProps) {
                 }} />
             </Appbar.Header>
 
+
+            
             {/* Time picker */}
+            {/* TODO: add ability to start drive on one day and end on another (going past midnight) */}
             <TimePickerModal
                 visible={startTimePickerVisible}
                 onDismiss={() => setStartTimePickerVisible(false)}
