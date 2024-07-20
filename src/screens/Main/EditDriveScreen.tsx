@@ -78,6 +78,7 @@ export default function EditDriveScreen({
                     icon="delete"
                     onPress={() => {
                         AsyncStorage.getItem("drives").then((value) => {
+                            // TODO: make sure this can only be called once
                             let drives = JSON.parse(value ? value : "[]");
                             drives.splice(route.params.index, 1);
                             AsyncStorage.setItem(
