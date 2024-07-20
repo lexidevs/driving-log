@@ -2,11 +2,7 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import * as React from "react";
 import { View, StyleSheet, ScrollView } from "react-native";
 import {
-    Button,
     Checkbox,
-    TextInput,
-    Text,
-    FAB,
     Appbar,
     RadioButton,
     List,
@@ -317,12 +313,6 @@ const styles = StyleSheet.create({
         flex: 1,
         justifyContent: "center",
         alignItems: "center",
-    },
-    fab: {
-        position: "absolute",
-        margin: 16,
-        right: 0,
-        bottom: 0,
     },
     flexRow: {
         flexDirection: "row",
