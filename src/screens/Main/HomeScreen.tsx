@@ -3,7 +3,7 @@ import {
     StackScreenProps,
 } from "@react-navigation/stack";
 import * as React from "react";
-import { View, StyleSheet, Pressable } from "react-native";
+import { View, StyleSheet, Pressable, FlatList } from "react-native";
 import {
     Button,
     Checkbox,
@@ -59,6 +59,48 @@ function HomeScreen({ navigation }: HomeScreenProps) {
         setDrives(JSON.parse(value));
     });
 
+    const renderDrive = ({
+        item,
+        index,
+    }: {
+        item: DriveProps;
+        index: number;
+    }): JSX.Element => {
+        const icon = item.day ? "weather-sunny" : "weather-night";
+        // Use modulo to get minutes, then subtract that from length to get a multiple of 60
+        // Then divide by 60 to get hours
+        const startDate = new Date(item.startDate);
+        const endDate = new Date(item.endDate);
+        const length = endDate.getTime() - startDate.getTime();
+        const lengthString = `${Math.floor(length / 3600000)}h ${Math.floor(
+            (length % 3600000) / 60000
+        )}m`;
+
+        const title = `${lengthString} drive on ${startDate.toLocaleDateString(
+            "en-US"
+        )}`;
+        const notes = item.notes ? item.notes : "No notes";
+        return (
+            <TouchableRipple
+                onPress={() =>
+                    navigation.navigate("EditDrive", {
+                        drive: item,
+                        index: index,
+                    })
+                }
+            >
+                <List.Item
+                    title={title}
+                    description={notes}
+                    left={(props) => <List.Icon {...props} icon={icon} />}
+                    right={(props) => (
+                        <List.Icon {...props} icon="chevron-right" />
+                    )}
+                />
+            </TouchableRipple>
+        );
+    };
+
     return (
         <>
             <Appbar.Header>
@@ -66,52 +108,13 @@ function HomeScreen({ navigation }: HomeScreenProps) {
             </Appbar.Header>
             <View style={styles.container}>
                 {/* List previous drives, each is pressable */}
-                <List.Section style={{ width: "100%" }}>
-                    {drives.map((drive, index) => {
-                        const icon = drive.day
-                            ? "weather-sunny"
-                            : "weather-night";
-                        // Use modulo to get minutes, then subtract that from length to get a multiple of 60
-                        // Then divide by 60 to get hours
-                        const startDate = new Date(drive.startDate);
-                        const endDate = new Date(drive.endDate);
-                        const length = endDate.getTime() - startDate.getTime();
-                        const lengthString = `${Math.floor(
-                            length / 3600000
-                        )}h ${Math.floor((length % 3600000) / 60000)}m`;
-
-                        const title = `${lengthString} drive on ${startDate.toLocaleDateString(
-                            "en-US"
-                        )}`;
-                        const notes = drive.notes ? drive.notes : "No notes";
-                        return (
-                            <View key={index}>
-                                <TouchableRipple
-                                    onPress={() =>
-                                        navigation.navigate("EditDrive", {
-                                            drive,
-                                            index,
-                                        })
-                                    }
-                                >
-                                    <List.Item
-                                        title={title}
-                                        description={notes}
-                                        left={(props) => (
-                                            <List.Icon {...props} icon={icon} />
-                                        )}
-                                        right={(props) => (
-                                            <List.Icon
-                                                {...props}
-                                                icon="chevron-right"
-                                            />
-                                        )}
-                                    />
-                                </TouchableRipple>
-                                {index < drives.length - 1 && <Divider />}
-                            </View>
-                        );
-                    })}
+                <List.Section style={{ width: "100%", flex: 1 }}>
+                    <FlatList
+                        data={drives}
+                        renderItem={renderDrive}
+                        keyExtractor={(item, index) => index.toString()}
+                        ItemSeparatorComponent={Divider}
+                    />
                 </List.Section>
 
                 <FAB
