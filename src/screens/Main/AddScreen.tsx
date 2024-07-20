@@ -9,6 +9,7 @@ import {
     Appbar,
     TouchableRipple,
     MD3Colors,
+    Divider,
 } from "react-native-paper";
 import type { StackScreenProps } from "@react-navigation/stack";
 import type { HomeStackParamList } from "./HomeScreen";
@@ -41,42 +42,42 @@ export default function AddScreen({ navigation }: AddScreenProps) {
                 <Appbar.Action icon="check" onPress={() => {}} />
             </Appbar.Header>
 
+            {/* Time picker */}
+            <TimePickerModal
+                visible={startTimePickerVisible}
+                onDismiss={() => setStartTimePickerVisible(false)}
+                onConfirm={(time) => {
+                    setStartTimePickerVisible(false);
+                    if (!time) return;
+                    let newStartDate = new Date(startDate);
+                    newStartDate.setHours(time.hours, time.minutes);
+                    setStartDate(newStartDate);
+                }}
+                hours={startDate.getHours()}
+                minutes={startDate.getMinutes()}
+                locale="en"
+            />
+
+            <TimePickerModal
+                visible={endTimePickerVisible}
+                onDismiss={() => setEndTimePickerVisible(false)}
+                onConfirm={(time) => {
+                    setEndTimePickerVisible(false);
+                    if (!time) return;
+                    let newEndDate = new Date(endDate);
+                    newEndDate.setHours(time.hours, time.minutes);
+                    setEndDate(newEndDate);
+                }}
+                hours={endDate.getHours()}
+                minutes={endDate.getMinutes()}
+                locale="en"
+            />
+
             <View style={styles.formContainer}>
-                {/* Time picker */}
-                <TimePickerModal
-                    visible={startTimePickerVisible}
-                    onDismiss={() => setStartTimePickerVisible(false)}
-                    onConfirm={(time) => {
-                        setStartTimePickerVisible(false);
-                        if (!time) return;
-                        let newStartDate = new Date(startDate);
-                        newStartDate.setHours(time.hours, time.minutes);
-                        setStartDate(newStartDate);
-                    }}
-                    hours={startDate.getHours()}
-                    minutes={startDate.getMinutes()}
-                    locale="en"
-                />
-
-                <TimePickerModal
-                    visible={endTimePickerVisible}
-                    onDismiss={() => setEndTimePickerVisible(false)}
-                    onConfirm={(time) => {
-                        setEndTimePickerVisible(false);
-                        if (!time) return;
-                        let newEndDate = new Date(endDate);
-                        newEndDate.setHours(time.hours, time.minutes);
-                        setEndDate(newEndDate);
-                    }}
-                    hours={endDate.getHours()}
-                    minutes={endDate.getMinutes()}
-                    locale="en"
-                />
-
                 <View style={styles.container}>
                     <View style={styles.inputRow}>
                         <DatePickerInput
-                            style={styles.input}
+                            style={styles.inputMargins}
                             locale="en"
                             label="Date"
                             value={startDate}
@@ -102,99 +103,135 @@ export default function AddScreen({ navigation }: AddScreenProps) {
                         />
                     </View>
                     <View style={styles.inputRow}>
-                        <TextInput
-                            style={styles.input}
-                            label="Start time"
-                            right={
-                                <TextInput.Icon
-                                    icon="clock"
-                                    onPress={() => {
-                                        setStartTimePickerVisible(true);
-                                    }}
+                        <View style={styles.root}>
+                            <View style={styles.inputContainer}>
+                                <TextInput
+                                    style={[styles.input, styles.inputMargins]}
+                                    label="Start time"
+                                    right={
+                                        <TextInput.Icon
+                                            icon="clock"
+                                            onPress={() => {
+                                                setStartTimePickerVisible(true);
+                                            }}
+                                        />
+                                    }
+                                    value={startDate.toLocaleTimeString(
+                                        "en-US",
+                                        {
+                                            hour: "numeric",
+                                            minute: "numeric",
+                                            hour12: true,
+                                        }
+                                    )}
                                 />
-                            }
-                            value={startDate.toLocaleTimeString("en-US", {
-                                hour: "numeric",
-                                minute: "numeric",
-                                hour12: true,
-                            })}
-                        />
+                            </View>
+                        </View>
                     </View>
                     <View style={styles.inputRow}>
-                        <TextInput
-                            style={styles.input}
-                            label="End time"
-                            right={
-                                <TextInput.Icon
-                                    icon="clock"
-                                    onPress={() => {
-                                        setEndTimePickerVisible(true);
-                                    }}
+                        <View style={styles.root}>
+                            <View style={styles.inputContainer}>
+                                <TextInput
+                                    style={[styles.input, styles.inputMargins]}
+                                    label="End time"
+                                    right={
+                                        <TextInput.Icon
+                                            icon="clock"
+                                            onPress={() => {
+                                                setEndTimePickerVisible(true);
+                                            }}
+                                        />
+                                    }
+                                    value={endDate.toLocaleTimeString("en-US", {
+                                        hour: "numeric",
+                                        minute: "numeric",
+                                        hour12: true,
+                                    })}
                                 />
-                            }
-                            value={endDate.toLocaleTimeString("en-US", {
-                                hour: "numeric",
-                                minute: "numeric",
-                                hour12: true,
-                            })}
-                        />
+                            </View>
+                        </View>
                     </View>
                     <View style={styles.inputRow}>
-                        <TouchableRipple
-                            style={styles.pressableStyle}
-                            borderless
-                            onPress={() => setDay(!day)}
-                        >
-                            <AttributeChip
-                                label="Time of day"
-                                value={day ? "Day" : "Night"}
-                                icon={day ? "weather-sunny" : "weather-night"}
-                                containerStyle={styles.attrContainer}
-                                attributeStyle={styles.attr}
-                                valueStyle={styles.attrText}
-                            />
-                        </TouchableRipple>
+                        <View style={styles.inputMargins}>
+                            <TouchableRipple
+                                style={styles.pressableStyle}
+                                borderless
+                                onPress={() => setDay(!day)}
+                            >
+                                <AttributeChip
+                                    label="Time of day"
+                                    value={day ? "Day" : "Night"}
+                                    icon={
+                                        day ? "weather-sunny" : "weather-night"
+                                    }
+                                    containerStyle={styles.attrContainer}
+                                    attributeStyle={styles.attr}
+                                    valueStyle={styles.attrText}
+                                />
+                            </TouchableRipple>
+                        </View>
                     </View>
                     <View style={styles.inputRow}>
-                        <TouchableRipple
-                            style={styles.pressableStyle}
-                            borderless
-                            onPress={() => {
-                                switch (weather) {
-                                    case "Sunny":
-                                        setWeather("Raining");
-                                        break;
-                                    case "Raining":
-                                        setWeather("Snowing");
-                                        break;
-                                    case "Snowing":
-                                        setWeather("Foggy");
-                                        break;
-                                    case "Foggy":
-                                        setWeather("Sunny");
-                                        break;
-                                }
+                        <View style={styles.inputMargins}>
+                            <TouchableRipple
+                                style={styles.pressableStyle}
+                                borderless
+                                onPress={() => {
+                                    switch (weather) {
+                                        case "Sunny":
+                                            setWeather("Raining");
+                                            break;
+                                        case "Raining":
+                                            setWeather("Snowing");
+                                            break;
+                                        case "Snowing":
+                                            setWeather("Foggy");
+                                            break;
+                                        case "Foggy":
+                                            setWeather("Sunny");
+                                            break;
+                                    }
+                                }}
+                            >
+                                <AttributeChip
+                                    label="Weather"
+                                    value={weather}
+                                    icon={
+                                        weather === "Sunny"
+                                            ? "weather-sunny"
+                                            : weather === "Raining"
+                                            ? "weather-pouring"
+                                            : weather === "Snowing"
+                                            ? "weather-snowy"
+                                            : weather === "Foggy"
+                                            ? "weather-fog"
+                                            : "weather-sunny"
+                                    }
+                                    containerStyle={styles.attrContainer}
+                                    attributeStyle={styles.attr}
+                                    valueStyle={styles.attrText}
+                                />
+                            </TouchableRipple>
+                        </View>
+                    </View>
+                    <Divider
+                        style={[
+                            styles.divider,
+                            {
+                                marginVertical: 6,
+                            },
+                        ]}
+                    />
+                    <View style={styles.notesContainer}>
+                        <TextInput
+                            multiline
+                            value={notes}
+                            label="Notes"
+                            style={styles.notes}
+                            onChangeText={(text) => {
+                                setNotes(text);
                             }}
-                        >
-                            <AttributeChip
-                                label="Weather"
-                                value={weather}
-                                icon={
-                                    weather === "Sunny"
-                                        ? "weather-sunny"
-                                        : weather === "Raining"
-                                        ? "weather-pouring"
-                                        : weather === "Snowing"
-                                        ? "weather-snowy"
-                                        : weather === "Foggy"
-                                        ? "weather-fog"
-                                        : "weather-sunny"
-                                }
-                                containerStyle={styles.attrContainer}
-                                attributeStyle={styles.attr}
-                                valueStyle={styles.attrText}
-                            />
-                        </TouchableRipple>
+                        />
                     </View>
                 </View>
             </View>
@@ -203,35 +240,36 @@ export default function AddScreen({ navigation }: AddScreenProps) {
 }
 
 const styles = StyleSheet.create({
+    divider: {
+        width: "100%",
+    },
+    notesContainer: {
+        flex: 1, // Take up all available space on main axis (vertical)
+        width: "100%", // Take up all available space on cross axis (horizontal)
+    },
+    notes: {
+        marginTop: 6,
+        marginBottom: 12,
+        marginHorizontal: 12,
+        // Take up all available space on main axis (vertical)
+        flex: 1,
+    },
     container: {
         flex: 1,
+        flexDirection: "column",
         justifyContent: "center",
         alignItems: "center",
+        height: "100%",
+        width: "100%",
     },
-    fab: {
-        position: "absolute",
-        margin: 16,
-        right: 0,
-        bottom: 0,
-    },
-    root: {
-        flex: 1,
+    smallTextInput: {
         flexGrow: 1,
-        justifyContent: "center",
-        alignItems: "flex-start",
-        width: "100%",
     },
-    inputContainer: {
+    inputMargins: {
+        // grow horizontally to take up all available space
         flex: 1,
-        flexDirection: "row",
-        alignItems: "center",
-        width: "100%",
-        justifyContent: "flex-start",
-    },
-    input: {
-        flex: 1,
-        width: "100%",
-        marginBottom: 16,
+        marginVertical: 6,
+        marginHorizontal: 12,
     },
     inputRow: {
         flexDirection: "row",
@@ -242,13 +280,11 @@ const styles = StyleSheet.create({
     pressableStyle: {
         borderRadius: 8,
         width: "100%",
-        marginBottom: 16,
     },
     formContainer: {
         flex: 1,
         justifyContent: "center",
         alignItems: "center",
-        padding: 16, // This adds horizontal padding for the margins
         width: "100%",
     },
     attrContainer: {
@@ -269,6 +305,25 @@ const styles = StyleSheet.create({
         flexDirection: "column",
         justifyContent: "center",
         alignItems: "center",
+        width: "100%",
+    },
+
+    root: {
+        flex: 1,
+        flexGrow: 1,
+        justifyContent: "center",
+        alignItems: "flex-start",
+        width: "100%",
+    },
+    inputContainer: {
+        flexGrow: 1,
+        flexDirection: "row",
+        alignItems: "center",
+        justifyContent: "flex-start",
+        width: "100%",
+    },
+    input: {
+        flexGrow: 1,
         width: "100%",
     },
 });
