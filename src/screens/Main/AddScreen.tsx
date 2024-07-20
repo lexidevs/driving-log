@@ -45,13 +45,22 @@ export default function AddScreen({ navigation }: AddScreenProps) {
                     AsyncStorage.getItem("drives").then((value) => {
                         // TODO: potential race condition?? unsure
                         // TODO: add validation
+                        let exportedStartDate = new Date(startDate);
+                        let exportedEndDate = new Date(endDate);
+
+                        exportedStartDate.setSeconds(0);
+                        exportedStartDate.setMilliseconds(0);
+                        exportedEndDate.setSeconds(0);
+                        exportedEndDate.setMilliseconds(0);
+
+
                         let drives = [];
                         if (value) {
                             drives = JSON.parse(value);
                         }
                         drives.push({
-                            startDate: startDate.toISOString(),
-                            endDate: endDate.toISOString(),
+                            startDate: exportedStartDate.toISOString(),
+                            endDate: exportedEndDate.toISOString(),
                             day,
                             weather,
                             notes,
