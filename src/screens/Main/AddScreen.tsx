@@ -15,6 +15,7 @@ import type { StackScreenProps } from "@react-navigation/stack";
 import type { HomeStackParamList } from "./HomeScreen";
 import { DatePickerInput, TimePickerModal } from "react-native-paper-dates";
 import AttributeChip from "../../components/AttributeChip";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 type AddScreenProps = StackScreenProps<HomeStackParamList, "Add">;
 
@@ -39,7 +40,26 @@ export default function AddScreen({ navigation }: AddScreenProps) {
                     onPress={() => navigation.navigate("Home")}
                 />
                 <Appbar.Content title="Add a previous drive" />
-                <Appbar.Action icon="check" onPress={() => {}} />
+                <Appbar.Action icon="check" onPress={() => {
+                    // Save the drive
+                    AsyncStorage.getItem("drives").then((value) => {
+                        // TODO: potential race condition?? unsure
+                        // TODO: add validation
+                        let drives = [];
+                        if (value) {
+                            drives = JSON.parse(value);
+                        }
+                        drives.push({
+                            startDate: startDate.toISOString(),
+                            endDate: endDate.toISOString(),
+                            day,
+                            weather,
+                            notes,
+                        });
+                        AsyncStorage.setItem("drives", JSON.stringify(drives));
+                    });
+                    navigation.navigate("Home");
+                }} />
             </Appbar.Header>
 
             {/* Time picker */}
