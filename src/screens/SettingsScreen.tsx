@@ -26,6 +26,8 @@ import {
 import TimeInput from "react-native-paper-dates/src/Time/TimeInput";
 import TimeInputs from "react-native-paper-dates/src/Time/TimeInputs";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import * as Linking from "expo-linking";
+import { expo } from "../../app.json";
 
 export default function SettingsScreen() {
     const theme = useTheme();
@@ -369,8 +371,7 @@ export default function SettingsScreen() {
                                     // eslint-disable-next-line react-native/no-inline-styles
                                     {
                                         backgroundColor:
-                                            theme.colors.elevation
-                                                .level3,
+                                            theme.colors.elevation.level3,
                                         borderRadius: 28,
                                     },
                                 ]}
@@ -381,8 +382,7 @@ export default function SettingsScreen() {
                                         style={[
                                             styles.label,
                                             {
-                                                ...theme.fonts
-                                                    .labelMedium,
+                                                ...theme.fonts.labelMedium,
                                                 color:
                                                     theme.colors
                                                         .onSurfaceVariant,
@@ -630,6 +630,53 @@ export default function SettingsScreen() {
                                             {...props}
                                             icon="chevron-right"
                                         />
+                                    )}
+                                />
+                            </TouchableRipple>
+                        </List.Section>
+                        <List.Section title="About">
+                            <TouchableRipple
+                                onPress={() => {
+                                    // link to the GitHub repo
+                                    Linking.openURL(
+                                        "https://github.com/lexidevs/driving-log"
+                                    );
+                                }}
+                            >
+                                <List.Item
+                                    title="Version"
+                                    description={expo.version}
+                                    right={(props) => (
+                                        <List.Icon
+                                            {...props}
+                                            icon="chevron-right"
+                                        />
+                                    )}
+                                    left={(props) => (
+                                        <List.Icon
+                                            {...props}
+                                            icon="information"
+                                        />
+                                    )}
+                                />
+                            </TouchableRipple>
+                            <TouchableRipple
+                                onPress={() => {
+                                    Linking.openURL(
+                                        "https://github.com/lexidevs/driving-log/blob/main/third-party-licenses.txt"
+                                    );
+                                }}
+                            >
+                                <List.Item
+                                    title="Open source licenses"
+                                    right={(props) => (
+                                        <List.Icon
+                                            {...props}
+                                            icon="chevron-right"
+                                        />
+                                    )}
+                                    left={(props) => (
+                                        <List.Icon {...props} icon="license" />
                                     )}
                                 />
                             </TouchableRipple>
