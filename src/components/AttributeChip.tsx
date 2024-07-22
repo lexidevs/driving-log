@@ -17,18 +17,23 @@ interface AttributeChipProps {
     containerStyle?: object;
     attributeStyle?: object;
     valueStyle?: object;
+    textColor?: string;
 }
 
-const AttributeChip: React.FC<AttributeChipProps> = ({ label, value, icon, containerStyle, attributeStyle, valueStyle }) => {
+const AttributeChip: React.FC<AttributeChipProps> = ({ label, value, icon, containerStyle, attributeStyle, valueStyle, textColor }) => {
     return (
         <View style={containerStyle}>
             {/* Small label that describes the type of the value */}
-            <Text variant="labelMedium">{label}</Text>
+            <Text variant="labelMedium" style={{
+                color: textColor,
+            }}>{label}</Text>
             <View style={attributeStyle}>
                 {/* Icon to depict value */}
-                <Icon source={icon} size={16} />
+                <Icon source={icon} size={16} color={textColor} />
                 {/* Actual value text */}
-                <Text variant="titleMedium" style={valueStyle}>
+                <Text variant="titleMedium" style={[valueStyle,{
+                    color: textColor,
+                }]}>
                     {value}
                 </Text>
             </View>

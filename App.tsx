@@ -1,6 +1,6 @@
 import { StatusBar } from "expo-status-bar";
-import { AppRegistry, StyleSheet, Text, View } from "react-native";
-import { PaperProvider, MD3DarkTheme } from "react-native-paper";
+import { AppRegistry, StyleSheet, Text, View, useColorScheme } from "react-native";
+import { PaperProvider, MD3DarkTheme, MD3LightTheme } from "react-native-paper";
 import * as React from "react";
 import App from "./src";
 import { SafeAreaProvider } from "react-native-safe-area-context";
@@ -27,9 +27,14 @@ export default function Main() {
         });
     }, []);
 
+    const colorScheme = useColorScheme();
+    const theme = colorScheme === "dark" ? MD3DarkTheme : MD3LightTheme;
+
+    
+
     return (
         <SafeAreaProvider>
-            <PaperProvider theme={MD3DarkTheme}>
+            <PaperProvider theme={theme}>
                 <App />
             </PaperProvider>
         </SafeAreaProvider>

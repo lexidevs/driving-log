@@ -23,7 +23,7 @@ import {
     TouchableRipple,
     Modal,
     Portal,
-    MD3DarkTheme,
+    useTheme,
 } from "react-native-paper";
 import {
     DatePickerModal,
@@ -50,6 +50,8 @@ export default function EditDriveScreen({
     navigation,
     route,
 }: EditDriveScreenProps) {
+    const theme = useTheme();
+    
     const [startDate, setStartDate] = React.useState(
         new Date(route.params.drive.startDate)
     );
@@ -191,9 +193,10 @@ export default function EditDriveScreen({
                             label="Date"
                             value={startDate.toLocaleDateString()}
                             icon="calendar"
-                            containerStyle={styles.attrContainer}
+                            containerStyle={[styles.attrContainer, {backgroundColor: theme.colors.primary}]}
                             attributeStyle={styles.attr}
                             valueStyle={styles.attrText}
+                            textColor={theme.dark ? '#000000' : '#ffffff'}
                         />
                     </TouchableRipple>
 
@@ -206,9 +209,10 @@ export default function EditDriveScreen({
                             label="Time of day"
                             value={day ? "Day" : "Night"}
                             icon={day ? "weather-sunny" : "weather-night"}
-                            containerStyle={styles.attrContainer}
+                            containerStyle={[styles.attrContainer, {backgroundColor: theme.colors.primary}]}
                             attributeStyle={styles.attr}
                             valueStyle={styles.attrText}
+                            textColor={theme.dark ? '#000000' : '#ffffff'}
                         />
                     </TouchableRipple>
 
@@ -246,9 +250,10 @@ export default function EditDriveScreen({
                                     ? "weather-fog"
                                     : "weather-sunny"
                             }
-                            containerStyle={styles.attrContainer}
+                            containerStyle={[styles.attrContainer, {backgroundColor: theme.colors.primary}]}
                             attributeStyle={styles.attr}
                             valueStyle={styles.attrText}
+                            textColor={theme.dark ? '#000000' : '#ffffff'}
                         />
                     </TouchableRipple>
 
@@ -272,9 +277,10 @@ export default function EditDriveScreen({
                                 }
                             )}
                             icon="clock"
-                            containerStyle={styles.attrContainer}
+                            containerStyle={[styles.attrContainer, {backgroundColor: theme.colors.primary}]}
                             attributeStyle={styles.attr}
                             valueStyle={styles.attrText}
+                            textColor={theme.dark ? '#000000' : '#ffffff'}
                         />
                     </TouchableRipple>
 
@@ -298,9 +304,10 @@ export default function EditDriveScreen({
                                 }
                             )}
                             icon="clock"
-                            containerStyle={styles.attrContainer}
+                            containerStyle={[styles.attrContainer, {backgroundColor: theme.colors.primary}]}
                             attributeStyle={styles.attr}
                             valueStyle={styles.attrText}
+                            textColor={theme.dark ? '#000000' : '#ffffff'}
                         />
                     </TouchableRipple>
                 </View>
@@ -360,7 +367,6 @@ const styles = StyleSheet.create({
     attrContainer: {
         padding: 8,
         borderRadius: 8,
-        backgroundColor: MD3Colors.primary20,
         minWidth: 120,
     },
     attrText: {

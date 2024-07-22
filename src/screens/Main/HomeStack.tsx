@@ -4,7 +4,9 @@ import {
     StackScreenProps,
 } from "@react-navigation/stack";
 
-import { AddScreen, EditDriveScreen, HomeScreen } from "./index";
+import AddScreen from "./AddScreen";
+import EditDriveScreen from "./EditDriveScreen";
+import HomeScreen from "./HomeScreen";
 
 type DriveProps = {
     startDate: string;

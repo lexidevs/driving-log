@@ -19,17 +19,17 @@ import {
     Appbar,
     List,
     TouchableRipple,
-    HelperText,
-    Icon,
     Modal,
-    MD3DarkTheme,
     Portal,
+    useTheme,
 } from "react-native-paper";
 import TimeInput from "react-native-paper-dates/src/Time/TimeInput";
 import TimeInputs from "react-native-paper-dates/src/Time/TimeInputs";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
 export default function SettingsScreen() {
+    const theme = useTheme();
+
     const [timeModalVisible, setTimeModalVisible] = React.useState(false);
     const [nightTimeModalVisible, setNightTimeModalVisible] = React.useState(
         false
@@ -165,8 +165,7 @@ export default function SettingsScreen() {
                                     // eslint-disable-next-line react-native/no-inline-styles
                                     {
                                         backgroundColor:
-                                            MD3DarkTheme.colors.elevation
-                                                .level3,
+                                            theme.colors.elevation.level3,
                                         borderRadius: 28,
                                     },
                                 ]}
@@ -177,10 +176,9 @@ export default function SettingsScreen() {
                                         style={[
                                             styles.label,
                                             {
-                                                ...MD3DarkTheme.fonts
-                                                    .labelMedium,
+                                                ...theme.fonts.labelMedium,
                                                 color:
-                                                    MD3DarkTheme.colors
+                                                    theme.colors
                                                         .onSurfaceVariant,
                                             },
                                         ]}
@@ -212,20 +210,14 @@ export default function SettingsScreen() {
                                                 inputType={"keyboard"}
                                                 maxFontSizeMultiplier={1.2}
                                                 selectionColor={
-                                                    // theme.dark
-                                                    //     ? Color(
-                                                    //           theme.colors
-                                                    //               .primary
-                                                    //       )
-                                                    //           .darken(0.2)
-                                                    //           .hex()
-                                                    //     : theme.colors.primary
-                                                    Color(
-                                                        MD3DarkTheme.colors
-                                                            .primary
-                                                    )
-                                                        .darken(0.2)
-                                                        .hex()
+                                                    theme.dark
+                                                        ? Color(
+                                                              theme.colors
+                                                                  .primary
+                                                          )
+                                                              .darken(0.2)
+                                                              .hex()
+                                                        : theme.colors.primary
                                                 }
                                                 returnKeyType={"next"}
                                                 blurOnSubmit={false}
@@ -265,7 +257,7 @@ export default function SettingsScreen() {
                                                         //     : ((theme as any) as MD2Theme)
                                                         //           .colors.text,
                                                         backgroundColor:
-                                                            MD3DarkTheme.colors
+                                                            theme.colors
                                                                 .onSurface,
                                                     },
                                                 ]}
@@ -281,7 +273,7 @@ export default function SettingsScreen() {
                                                         //     : ((theme as any) as MD2Theme)
                                                         //           .colors.text,
                                                         backgroundColor:
-                                                            MD3DarkTheme.colors
+                                                            theme.colors
                                                                 .onSurface,
                                                     },
                                                 ]}
@@ -304,20 +296,14 @@ export default function SettingsScreen() {
                                                 inputType={"keyboard"}
                                                 maxFontSizeMultiplier={1.2}
                                                 selectionColor={
-                                                    // theme.dark
-                                                    //     ? Color(
-                                                    //           theme.colors
-                                                    //               .primary
-                                                    //       )
-                                                    //           .darken(0.2)
-                                                    //           .hex()
-                                                    //     : theme.colors.primary
-                                                    Color(
-                                                        MD3DarkTheme.colors
-                                                            .primary
-                                                    )
-                                                        .darken(0.2)
-                                                        .hex()
+                                                    theme.dark
+                                                        ? Color(
+                                                              theme.colors
+                                                                  .primary
+                                                          )
+                                                              .darken(0.2)
+                                                              .hex()
+                                                        : theme.colors.primary
                                                 }
                                                 // onSubmitEditing={
                                                 //     onSubmitEndInput
@@ -383,7 +369,7 @@ export default function SettingsScreen() {
                                     // eslint-disable-next-line react-native/no-inline-styles
                                     {
                                         backgroundColor:
-                                            MD3DarkTheme.colors.elevation
+                                            theme.colors.elevation
                                                 .level3,
                                         borderRadius: 28,
                                     },
@@ -395,10 +381,10 @@ export default function SettingsScreen() {
                                         style={[
                                             styles.label,
                                             {
-                                                ...MD3DarkTheme.fonts
+                                                ...theme.fonts
                                                     .labelMedium,
                                                 color:
-                                                    MD3DarkTheme.colors
+                                                    theme.colors
                                                         .onSurfaceVariant,
                                             },
                                         ]}
@@ -430,20 +416,14 @@ export default function SettingsScreen() {
                                                 inputType={"keyboard"}
                                                 maxFontSizeMultiplier={1.2}
                                                 selectionColor={
-                                                    // theme.dark
-                                                    //     ? Color(
-                                                    //           theme.colors
-                                                    //               .primary
-                                                    //       )
-                                                    //           .darken(0.2)
-                                                    //           .hex()
-                                                    //     : theme.colors.primary
-                                                    Color(
-                                                        MD3DarkTheme.colors
-                                                            .primary
-                                                    )
-                                                        .darken(0.2)
-                                                        .hex()
+                                                    theme.dark
+                                                        ? Color(
+                                                              theme.colors
+                                                                  .primary
+                                                          )
+                                                              .darken(0.2)
+                                                              .hex()
+                                                        : theme.colors.primary
                                                 }
                                                 returnKeyType={"next"}
                                                 blurOnSubmit={false}
@@ -483,7 +463,7 @@ export default function SettingsScreen() {
                                                         //     : ((theme as any) as MD2Theme)
                                                         //           .colors.text,
                                                         backgroundColor:
-                                                            MD3DarkTheme.colors
+                                                            theme.colors
                                                                 .onSurface,
                                                     },
                                                 ]}
@@ -500,7 +480,7 @@ export default function SettingsScreen() {
                                                         //     : ((theme as any) as MD2Theme)
                                                         //           .colors.text,
                                                         backgroundColor:
-                                                            MD3DarkTheme.colors
+                                                            theme.colors
                                                                 .onSurface,
                                                     },
                                                 ]}
@@ -523,20 +503,14 @@ export default function SettingsScreen() {
                                                 inputType={"keyboard"}
                                                 maxFontSizeMultiplier={1.2}
                                                 selectionColor={
-                                                    // theme.dark
-                                                    //     ? Color(
-                                                    //           theme.colors
-                                                    //               .primary
-                                                    //       )
-                                                    //           .darken(0.2)
-                                                    //           .hex()
-                                                    //     : theme.colors.primary
-                                                    Color(
-                                                        MD3DarkTheme.colors
-                                                            .primary
-                                                    )
-                                                        .darken(0.2)
-                                                        .hex()
+                                                    theme.dark
+                                                        ? Color(
+                                                              theme.colors
+                                                                  .primary
+                                                          )
+                                                              .darken(0.2)
+                                                              .hex()
+                                                        : theme.colors.primary
                                                 }
                                                 // onSubmitEditing={
                                                 //     onSubmitEndInput
