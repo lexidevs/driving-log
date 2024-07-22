@@ -32,7 +32,7 @@ import {
     TimePickerModal,
 } from "react-native-paper-dates";
 import type { StackScreenProps } from "@react-navigation/stack";
-import type { HomeStackParamList } from "./HomeScreen";
+import type { HomeStackParamList } from "./HomeStack";
 // import {
 //     getLocales,
 //     getTimeZone,
