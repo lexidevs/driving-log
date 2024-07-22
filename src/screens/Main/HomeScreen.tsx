@@ -1,27 +1,75 @@
 import * as React from "react";
 import { View, StyleSheet, Pressable, FlatList } from "react-native";
 import {
-    Button,
-    Checkbox,
-    TextInput,
     Text,
     FAB,
     Appbar,
     List,
-    useTheme,
-    MD3Colors,
     TouchableRipple,
     Divider,
+    ProgressBar,
 } from "react-native-paper";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { HomeScreenProps, DriveProps } from "./HomeStack";
+import { useFocusEffect } from "@react-navigation/native";
 
+function minutesToString(minutes: number): string {
+    /*
+    Equivalent to: (assuming number is an integer) 
+    if (minutes % 60 == 0) {
+        return `${Math.trunc(minutes / 60)}h`; // Return just `${hours}h`
+    }
+    else {
+        return `${Math.trunc(minutes / 60)}h ${Math.trunc(minutes % 60)}m`; // Return `${hours}h ${minutes}m`
+    }
+    */
+
+    return `${Math.trunc(minutes / 60)}h${
+        Math.trunc(minutes % 60) == 0 ? "" : ` ${Math.trunc(minutes % 60)}m`
+    }`;
+}
 
 function HomeScreen({ navigation }: HomeScreenProps) {
     const [drives, setDrives] = React.useState<DriveProps[]>([]);
-    AsyncStorage.getItem("drives").then((value) => {
-        setDrives(JSON.parse(value ?? "[]"));
+    const [preferences, setPreferences] = React.useState({
+        showDriveTime: true,
+        showDriveProgress: true,
+        showNightDriveTime: true,
+        showNightDriveProgress: true,
+        requiredDriveTime: 3000,
+        requiredNightDriveTime: 600,
     });
+
+    useFocusEffect(
+        React.useCallback(() => {
+            AsyncStorage.getItem("drives").then((drives) => {
+                if (drives !== null) {
+                    setDrives(JSON.parse(drives));
+                }
+            });
+
+            AsyncStorage.getItem("preferences").then((preferences) => {
+                if (preferences !== null) {
+                    setPreferences(JSON.parse(preferences));
+                }
+            });
+        }, [])
+    );
+
+    const driveTime = drives.reduce((acc, drive) => {
+        const startDate = new Date(drive.startDate);
+        const endDate = new Date(drive.endDate);
+        return acc + (endDate.getTime() - startDate.getTime()) / 60000;
+    }, 0);
+
+    const nightDriveTime = drives.reduce((acc, drive) => {
+        if (!drive.day) {
+            const startDate = new Date(drive.startDate);
+            const endDate = new Date(drive.endDate);
+            return acc + (endDate.getTime() - startDate.getTime()) / 60000;
+        }
+        return acc;
+    }, 0);
 
     const renderDrive = ({
         item,
@@ -36,9 +84,7 @@ function HomeScreen({ navigation }: HomeScreenProps) {
         const startDate = new Date(item.startDate);
         const endDate = new Date(item.endDate);
         const length = endDate.getTime() - startDate.getTime();
-        const lengthString = `${Math.floor(length / 3600000)}h ${Math.floor(
-            (length % 3600000) / 60000
-        )}m`;
+        const lengthString = minutesToString(length / 60000);
 
         const title = `${lengthString} drive on ${startDate.toLocaleDateString(
             "en-US"
@@ -71,6 +117,63 @@ function HomeScreen({ navigation }: HomeScreenProps) {
                 <Appbar.Content title="Driving Log" />
             </Appbar.Header>
             <View style={styles.container}>
+                {/* drive progress */}
+                {preferences.showDriveTime && (
+                    <Text>
+                        Total drive time: {minutesToString(driveTime)} /{" "}
+                        {minutesToString(preferences.requiredDriveTime)}
+                    </Text>
+                )}
+
+                {preferences.showDriveProgress && (
+                    <>
+                        {
+                            // If showDriveTime is false, show a title
+                            !preferences.showDriveTime && (
+                                <Text>Total drive time</Text>
+                            )
+                        }
+                        <View style={styles.progressBarContainer}>
+                            <ProgressBar
+                                progress={
+                                    driveTime / preferences.requiredDriveTime
+                                }
+                                style={styles.progressBar}
+                            />
+                        </View>
+                    </>
+                )}
+
+                {/* night drive time */}
+                {preferences.showNightDriveTime && (
+                    <Text>
+                        Total night drive time:{" "}
+                        {minutesToString(nightDriveTime)} /{" "}
+                        {minutesToString(preferences.requiredNightDriveTime)}
+                    </Text>
+                )}
+
+                {/* night drive progress */}
+                {preferences.showNightDriveProgress && (
+                    <>
+                        {
+                            // If showNightDriveTime is false, show a title
+                            !preferences.showNightDriveTime && (
+                                <Text>Total night drive time</Text>
+                            )
+                        }
+                        <View style={styles.progressBarContainer}>
+                            <ProgressBar
+                                progress={
+                                    nightDriveTime /
+                                    preferences.requiredNightDriveTime
+                                }
+                                style={styles.progressBar}
+                            />
+                        </View>
+                    </>
+                )}
+
                 {/* List previous drives, each is pressable */}
                 <List.Section style={{ width: "100%", flex: 1 }}>
                     <FlatList
@@ -107,9 +210,12 @@ const styles = StyleSheet.create({
         right: 0,
         bottom: 0,
     },
-    drive: {
-        flexDirection: "row",
-        justifyContent: "space-between",
+    progressBarContainer: {
+        width: "100%",
+        marginVertical: 6,
+    },
+    progressBar: {
+        marginHorizontal: 12,
     },
 });
 
