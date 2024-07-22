@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { HomeScreen, ExportScreen, SettingsScreen, AddScreen } from '../screens';
+import { HomeStack, ExportScreen, SettingsScreen } from '../screens';
 
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
@@ -8,11 +8,12 @@ import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityI
 
 const Tab = createMaterialBottomTabNavigator();
 
+// TODO: add types
 export default function BottomBarNavigation(props) {
     return (
         <NavigationContainer {...props}>
             <Tab.Navigator>
-                <Tab.Screen name="Dashboard" component={HomeScreen} options={{
+                <Tab.Screen name="Dashboard" component={HomeStack} options={{
                     tabBarIcon: ({ color }) => (
                         <MaterialCommunityIcons name="home" color={color} size={26} />
                     ),

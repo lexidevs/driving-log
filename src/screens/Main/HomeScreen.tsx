@@ -1,7 +1,3 @@
-import {
-    createStackNavigator,
-    StackScreenProps,
-} from "@react-navigation/stack";
 import * as React from "react";
 import { View, StyleSheet, Pressable, FlatList } from "react-native";
 import {
@@ -17,40 +13,9 @@ import {
     TouchableRipple,
     Divider,
 } from "react-native-paper";
-
-import AddScreen from "./AddScreen";
-import EditDriveScreen from "./EditDriveScreen";
-
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import { HomeScreenProps, DriveProps } from "./HomeStack";
 
-type DriveProps = {
-    startDate: string;
-    endDate: string;
-    day: boolean;
-    weather: string;
-    notes?: string;
-    // TODO: add uuid?
-};
-
-type HomeStackParamList = {
-    Home: undefined;
-    Add: undefined;
-    InspectDrive: {
-        date: string;
-        length: number;
-        startTime: string;
-        endTime: string;
-        day: boolean;
-        weather: string;
-        notes?: string;
-        lengthString: string;
-    };
-    EditDrive: { drive: DriveProps; index: number };
-};
-
-const HomeStack = createStackNavigator<HomeStackParamList>();
-
-type HomeScreenProps = StackScreenProps<HomeStackParamList, "Home">;
 
 function HomeScreen({ navigation }: HomeScreenProps) {
     const [drives, setDrives] = React.useState<DriveProps[]>([]);
@@ -128,16 +93,6 @@ function HomeScreen({ navigation }: HomeScreenProps) {
     );
 }
 
-const HomeStackScreen = () => {
-    return (
-        <HomeStack.Navigator screenOptions={{ headerShown: false }}>
-            <HomeStack.Screen name="Home" component={HomeScreen} />
-            <HomeStack.Screen name="Add" component={AddScreen} />
-            <HomeStack.Screen name="EditDrive" component={EditDriveScreen} />
-        </HomeStack.Navigator>
-    );
-};
-
 const styles = StyleSheet.create({
     container: {
         flex: 1,
@@ -158,6 +113,4 @@ const styles = StyleSheet.create({
     },
 });
 
-export default HomeStackScreen;
-
-export { HomeStackScreen, HomeStackParamList };
+export default HomeScreen;

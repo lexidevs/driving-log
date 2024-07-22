@@ -12,7 +12,7 @@ import { NavigationContainer, DarkTheme } from "@react-navigation/native";
 import { createMaterialBottomTabNavigator } from "react-native-paper/react-navigation";
 // import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 
-import { HomeScreen, ExportScreen, SettingsScreen } from "./screens";
+import { HomeStack, ExportScreen, SettingsScreen } from "./screens";
 import BottomBarNavigation from "./components/Navigation";
 // status bar
 import { StatusBar } from "expo-status-bar";
