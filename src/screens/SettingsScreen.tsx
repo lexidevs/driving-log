@@ -121,7 +121,7 @@ export default function SettingsScreen() {
                 onConfirm={onConfirmNight}
             />
 
-            <ScrollView contentContainerStyle={styles.container}>
+            <ScrollView>
                 <View style={styles.flexRow}>
                     <View style={{ flex: 1 }}>
                         <List.Section title="Drive Time Preferences">
@@ -252,11 +252,6 @@ export default function SettingsScreen() {
 }
 
 const styles = StyleSheet.create({
-    container: {
-        flex: 1,
-        justifyContent: "flex-start",
-        alignItems: "center",
-    },
     flexRow: {
         flexDirection: "row",
         width: "100%",
