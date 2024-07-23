@@ -192,6 +192,8 @@ function HomeScreen({ navigation }: HomeScreenProps) {
                         navigation.navigate("Add");
                     }}
                 />
+                {/* TODO: add ability to log a drive now and start a stopwatch, then hit stop button. 
+                Possibly include the ability to track when vehicle is stopped or not using location */}
             </View>
         </>
     );
@@ -201,7 +203,6 @@ const styles = StyleSheet.create({
     container: {
         flex: 1,
         flexDirection: "column",
-        // justifyContent: 'center',
         alignItems: "center",
         height: "100%",
     },

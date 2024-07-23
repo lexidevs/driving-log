@@ -166,6 +166,7 @@ export default function EditDriveScreen({
                 presentationStyle="pageSheet"
             />
             <ScrollView contentContainerStyle={styles.container}>
+                {/* TODO: make look like AddScreen? */}
                 {/* Heading for drive length */}
                 <Text variant="headlineLarge" style={{ marginVertical: 12 }}>
                     {`${Math.floor(
