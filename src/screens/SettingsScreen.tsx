@@ -64,29 +64,35 @@ export default function SettingsScreen() {
     }
 
     // when total time modal is dismissed (without saving), set the time to the last saved value
-    const onDismissTotal = React.useCallback(() => {
+    const onDismissTotal = () => {
         setTimeModalVisible(false);
-    }, []);
+    };
 
-    const onConfirmTotal = React.useCallback(
-        ({ hours, minutes }: { hours: number; minutes: number }) => {
-            setTimeModalVisible(false);
-            setRequiredDriveTime(hours * 60 + minutes);
-        },
-        []
-    );
+    const onConfirmTotal = ({
+        hours,
+        minutes,
+    }: {
+        hours: number;
+        minutes: number;
+    }) => {
+        setTimeModalVisible(false);
+        setRequiredDriveTime(hours * 60 + minutes);
+    };
 
-    const onDismissNight = React.useCallback(() => {
+    const onDismissNight = () => {
         setNightTimeModalVisible(false);
-    }, []);
+    };
 
-    const onConfirmNight = React.useCallback(
-        ({ hours, minutes }: { hours: number; minutes: number }) => {
-            setNightTimeModalVisible(false);
-            setRequiredNightDriveTime(hours * 60 + minutes);
-        },
-        []
-    );
+    const onConfirmNight = ({
+        hours,
+        minutes,
+    }: {
+        hours: number;
+        minutes: number;
+    }) => {
+        setNightTimeModalVisible(false);
+        setRequiredNightDriveTime(hours * 60 + minutes);
+    };
 
     return (
         <>
