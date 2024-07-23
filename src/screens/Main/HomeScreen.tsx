@@ -1,5 +1,5 @@
 import * as React from "react";
-import { View, StyleSheet, Pressable, FlatList } from "react-native";
+import { View, StyleSheet, FlatList } from "react-native";
 import {
     Text,
     FAB,

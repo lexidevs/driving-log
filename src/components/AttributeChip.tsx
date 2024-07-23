@@ -1,6 +1,6 @@
 import * as React from 'react';
-import { View, StyleSheet } from 'react-native';
-import { Icon, MD3Colors, Text } from 'react-native-paper'
+import { View } from 'react-native';
+import { Icon, Text } from 'react-native-paper'
 
 
 /**

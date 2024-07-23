@@ -3,7 +3,6 @@ import {
     View,
     StyleSheet,
     ScrollView,
-    useWindowDimensions,
 } from "react-native";
 import {
     Checkbox,

@@ -2,27 +2,14 @@ import * as React from "react";
 import {
     View,
     StyleSheet,
-    Dimensions,
-    KeyboardAvoidingView,
-    Animated,
-    TouchableWithoutFeedback,
     ScrollView,
 } from "react-native";
 import {
-    Button,
-    Checkbox,
     TextInput,
     Text,
     Appbar,
-    SegmentedButtons,
-    Chip,
-    Icon,
-    MD3Colors,
-    HelperText,
     Divider,
     TouchableRipple,
-    Modal,
-    Portal,
     useTheme,
 } from "react-native-paper";
 import {
@@ -33,11 +20,6 @@ import {
 } from "react-native-paper-dates";
 import type { StackScreenProps } from "@react-navigation/stack";
 import type { HomeStackParamList } from "./HomeStack";
-// import {
-//     getLocales,
-//     getTimeZone,
-//     uses24HourClock,
-// } from "react-native-localize";
 
 import AttributeChip from "../../components/AttributeChip";
 import AsyncStorage from "@react-native-async-storage/async-storage";

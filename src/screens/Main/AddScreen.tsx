@@ -1,11 +1,7 @@
 import * as React from "react";
 import { View, StyleSheet, ScrollView } from "react-native";
 import {
-    Button,
-    Checkbox,
     TextInput,
-    Text,
-    FAB,
     Appbar,
     TouchableRipple,
     Divider,
