@@ -1,15 +1,12 @@
 import * as React from "react";
-import {
-    View,
-    StyleSheet,
-    ScrollView,
-} from "react-native";
+import { View, StyleSheet, ScrollView } from "react-native";
 import {
     Checkbox,
     Appbar,
     List,
     TouchableRipple,
     useTheme,
+    ActivityIndicator,
 } from "react-native-paper";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import * as Linking from "expo-linking";
@@ -17,7 +14,9 @@ import { expo } from "../../app.json";
 import { LengthPickerModal } from "../components/time/LengthPickerModal";
 
 export default function SettingsScreen() {
-    const theme = useTheme();
+    console.log("rendering!");
+
+    const [isLoading, setIsLoading] = React.useState(true);
 
     const [timeModalVisible, setTimeModalVisible] = React.useState(false);
     const [nightTimeModalVisible, setNightTimeModalVisible] = React.useState(
@@ -33,56 +32,62 @@ export default function SettingsScreen() {
     );
 
     // time inputs for total time modal
-    const [requiredDriveTime, setRequiredDriveTime] = React.useState(0);
+    const [requiredDriveTime, setRequiredDriveTime] = React.useState(3000);
     const [requiredNightDriveTime, setRequiredNightDriveTime] = React.useState(
-        0
+        600
     );
 
-    // when total time modal is dismissed (without saving), set the time to the last saved value
-    const onDismissTotal = () => {
-        setTimeModalVisible(false);
-    };
-
-    const onConfirmTotal = ({
-        hours,
-        minutes,
-    }: {
-        hours: number;
-        minutes: number;
-    }) => {
-        setTimeModalVisible(false);
-        setRequiredDriveTime(hours * 60 + minutes);
-    };
-
-    const onDismissNight = () => {
-        setNightTimeModalVisible(false);
-    };
-
-    const onConfirmNight = ({
-        hours,
-        minutes,
-    }: {
-        hours: number;
-        minutes: number;
-    }) => {
-        setNightTimeModalVisible(false);
-        setRequiredNightDriveTime(hours * 60 + minutes);
-    };
-
+    // load preferences from storage
     React.useEffect(() => {
-        AsyncStorage.getItem("preferences").then((value) => {
-            const preferences = JSON.parse(value ?? "{}");
-
-            setRequiredDriveTime(preferences.requiredDriveTime);
-            setRequiredNightDriveTime(preferences.requiredNightDriveTime);
-
-            setShowDriveTime(preferences.showDriveTime);
-            setShowDriveProgress(preferences.showDriveProgress);
-            setShowNightDriveTime(preferences.showNightDriveTime);
-            setShowNightDriveProgress(preferences.showNightDriveProgress);
+        AsyncStorage.getItem("preferences").then((preferences) => {
+            if (preferences) {
+                const parsedPreferences = JSON.parse(preferences);
+                setShowDriveTime(parsedPreferences.showDriveTime);
+                setShowDriveProgress(parsedPreferences.showDriveProgress);
+                setShowNightDriveTime(parsedPreferences.showNightDriveTime);
+                setShowNightDriveProgress(
+                    parsedPreferences.showNightDriveProgress
+                );
+                setRequiredDriveTime(parsedPreferences.requiredDriveTime);
+                setRequiredNightDriveTime(
+                    parsedPreferences.requiredNightDriveTime
+                );
+            }
+            setIsLoading(false);
         });
-    }, []); // Run only once
-    
+    }, []);
+
+    // Force the app to wait until the preferences are loaded before rendering
+    // This fixes bug where prefs are not loaded and causes issues
+    if (isLoading) {
+        return <ActivityIndicator />;
+    }
+
+    // when total time modal is dismissed (without saving), set the time to the last saved value
+    const onDismissTotal = React.useCallback(() => {
+        setTimeModalVisible(false);
+    }, []);
+
+    const onConfirmTotal = React.useCallback(
+        ({ hours, minutes }: { hours: number; minutes: number }) => {
+            setTimeModalVisible(false);
+            setRequiredDriveTime(hours * 60 + minutes);
+        },
+        []
+    );
+
+    const onDismissNight = React.useCallback(() => {
+        setNightTimeModalVisible(false);
+    }, []);
+
+    const onConfirmNight = React.useCallback(
+        ({ hours, minutes }: { hours: number; minutes: number }) => {
+            setNightTimeModalVisible(false);
+            setRequiredNightDriveTime(hours * 60 + minutes);
+        },
+        []
+    );
+
     return (
         <>
             <Appbar.Header>
