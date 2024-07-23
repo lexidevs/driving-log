@@ -83,10 +83,7 @@ export default function SettingsScreen() {
             setShowNightDriveProgress(preferences.showNightDriveProgress);
         });
     }, []); // Run only once
-
-    const dimensions = useWindowDimensions();
-    const isLandscape = dimensions.width > dimensions.height;
-
+    
     return (
         <>
             <Appbar.Header>
