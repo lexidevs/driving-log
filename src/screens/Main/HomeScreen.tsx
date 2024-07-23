@@ -14,6 +14,7 @@ import { HomeScreenProps, DriveProps } from "./HomeStack";
 import { useFocusEffect } from "@react-navigation/native";
 
 function minutesToString(minutes: number): string {
+    // TODO: move to a utils file
     /*
     Equivalent to: (assuming number is an integer) 
     if (minutes % 60 == 0) {
