@@ -20,9 +20,9 @@
     },
     "android": {
       "adaptiveIcon": {
-        "foregroundImage": "./assets/adaptive-icon-fg.svg",
-        "backgroundImage": "./assets/adaptive-icon-bg.svg",
-        "monochromeImage": "./assets/adaptive-icon-mono.svg"
+        "foregroundImage": "./assets/adaptive-icon-fg.png",
+        "backgroundImage": "./assets/adaptive-icon-bg.png",
+        "monochromeImage": "./assets/adaptive-icon-mono.png"
       },
       "package": "com.lexiroth.drivinglog"
     },
