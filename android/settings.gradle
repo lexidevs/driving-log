@@ -1,4 +1,4 @@
-rootProject.name = 'driving-log'
+rootProject.name = 'Driving Log'
 
 dependencyResolutionManagement {
   versionCatalogs {
