@@ -14,13 +14,13 @@ type DriveProps = {
     day: boolean;
     weather: string;
     notes?: string;
-    // TODO: add uuid?
+    uuid: string;
 };
 
 type HomeStackParamList = {
     Home: undefined;
     Add: undefined;
-    EditDrive: { drive: DriveProps; index: number };
+    EditDrive: { drive: DriveProps; };
 };
 
 const HomeStack = createStackNavigator<HomeStackParamList>();

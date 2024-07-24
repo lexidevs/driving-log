@@ -12,6 +12,7 @@ import type { HomeStackParamList } from "./HomeStack";
 import { DatePickerInput, TimePickerModal } from "react-native-paper-dates";
 import AttributeChip from "../../components/AttributeChip";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import { v4 as uuidv4 } from "uuid";
 
 type AddScreenProps = StackScreenProps<HomeStackParamList, "Add">;
 
@@ -63,6 +64,7 @@ export default function AddScreen({ navigation }: AddScreenProps) {
                                 day,
                                 weather,
                                 notes,
+                                uuid: uuidv4(),
                             });
                             AsyncStorage.setItem(
                                 "drives",

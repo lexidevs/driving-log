@@ -13,6 +13,7 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import { HomeScreenProps, DriveProps } from "./HomeStack";
 import { useFocusEffect } from "@react-navigation/native";
 import { minutesToString, datesToMinutes } from "../../utils";
+import { v4 as uuidv4 } from "uuid";
 
 function HomeScreen({ navigation }: HomeScreenProps) {
     const [drives, setDrives] = React.useState<DriveProps[]>([]);
@@ -29,7 +30,28 @@ function HomeScreen({ navigation }: HomeScreenProps) {
         React.useCallback(() => {
             AsyncStorage.getItem("drives").then((drives) => {
                 if (drives !== null) {
-                    setDrives(JSON.parse(drives));
+                    let parsedDrives = JSON.parse(drives);
+                    parsedDrives.sort((a: DriveProps, b: DriveProps) => {
+                        return (
+                            new Date(b.startDate).getTime() -
+                            new Date(a.startDate).getTime()
+                        );
+                    });
+
+                    for (let drive of parsedDrives) {
+                        if (!drive.uuid) {
+                            drive.uuid = uuidv4();
+                        }
+                    }
+
+                    if (parsedDrives !== drives) {
+                        AsyncStorage.setItem(
+                            "drives",
+                            JSON.stringify(parsedDrives)
+                        );
+                    }
+
+                    setDrives(parsedDrives);
                 }
             });
 
@@ -61,13 +83,7 @@ function HomeScreen({ navigation }: HomeScreenProps) {
         return acc;
     }, 0);
 
-    const renderDrive = ({
-        item,
-        index,
-    }: {
-        item: DriveProps;
-        index: number;
-    }): JSX.Element => {
+    const renderDrive = ({ item }: { item: DriveProps }): JSX.Element => {
         const icon = item.day ? "weather-sunny" : "weather-night";
         // Use modulo to get minutes, then subtract that from length to get a multiple of 60
         // Then divide by 60 to get hours
@@ -85,7 +101,6 @@ function HomeScreen({ navigation }: HomeScreenProps) {
                 onPress={() =>
                     navigation.navigate("EditDrive", {
                         drive: item,
-                        index: index,
                     })
                 }
             >
@@ -169,7 +184,7 @@ function HomeScreen({ navigation }: HomeScreenProps) {
                     <FlatList
                         data={drives}
                         renderItem={renderDrive}
-                        keyExtractor={(item, index) => index.toString()}
+                        keyExtractor={(item) => item.uuid}
                         ItemSeparatorComponent={Divider}
                     />
                 </List.Section>

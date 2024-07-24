@@ -15,7 +15,7 @@ import {
     TimePickerModal,
 } from "react-native-paper-dates";
 import type { StackScreenProps } from "@react-navigation/stack";
-import type { HomeStackParamList } from "./HomeStack";
+import type { DriveProps, HomeStackParamList } from "./HomeStack";
 
 import AttributeChip from "../../components/AttributeChip";
 import AsyncStorage from "@react-native-async-storage/async-storage";
@@ -61,7 +61,11 @@ export default function EditDriveScreen({
                         AsyncStorage.getItem("drives").then((value) => {
                             // TODO: make sure this can only be called once
                             let drives = JSON.parse(value ? value : "[]");
-                            drives.splice(route.params.index, 1);
+                            // delete drive with uuid
+                            drives = drives.filter(
+                                (drive: DriveProps) =>
+                                    drive.uuid !== route.params.drive.uuid
+                            );
                             AsyncStorage.setItem(
                                 "drives",
                                 JSON.stringify(drives)
@@ -75,13 +79,20 @@ export default function EditDriveScreen({
                     onPress={() => {
                         AsyncStorage.getItem("drives").then((value) => {
                             let drives = JSON.parse(value ? value : "[]");
-                            drives[route.params.index] = {
-                                startDate: startDate.toISOString(),
-                                endDate: endDate.toISOString(),
-                                day: day,
-                                weather: weather,
-                                notes: notes,
-                            };
+                            // find drive with uuid and replace it with this drive
+                            drives = drives.map((drive: DriveProps) => {
+                                if (drive.uuid === route.params.drive.uuid) {
+                                    return {
+                                        startDate: startDate.toISOString(),
+                                        endDate: endDate.toISOString(),
+                                        day: day,
+                                        weather: weather,
+                                        notes: notes,
+                                        uuid: drive.uuid,
+                                    };
+                                }
+                                return drive;
+                            });
                             AsyncStorage.setItem(
                                 "drives",
                                 JSON.stringify(drives)
@@ -148,7 +159,7 @@ export default function EditDriveScreen({
                 {/* TODO: make look like AddScreen? */}
                 {/* Heading for drive length */}
                 <Text variant="headlineLarge" style={{ marginVertical: 12 }}>
-                    {minutesToString(datesToMinutes(startDate, endDate))}
+                    {minutesToString(datesToMinutes(startDate, endDate))} drive
                 </Text>
 
                 <Divider style={styles.divider} />
