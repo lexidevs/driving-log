@@ -1,14 +1,10 @@
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import * as React from "react";
 import { View, StyleSheet, ScrollView } from "react-native";
-import {
-    Checkbox,
-    Appbar,
-    RadioButton,
-    List,
-} from "react-native-paper";
+import { Checkbox, Appbar, RadioButton, List } from "react-native-paper";
 import * as FileSystem from "expo-file-system";
 import * as Sharing from "expo-sharing";
+import { datesToMinutes, minutesToString } from "../utils";
 
 export default function ExportScreen() {
     const [type, setType] = React.useState("csv");
@@ -79,14 +75,15 @@ export default function ExportScreen() {
                                                                     drive.endDate
                                                                 ).toLocaleTimeString();
                                                             case "Length": // minutes
-                                                                return Math.floor(
-                                                                    new Date(
-                                                                        drive.endDate
-                                                                    ).getTime() -
+                                                                return minutesToString(
+                                                                    datesToMinutes(
                                                                         new Date(
                                                                             drive.startDate
-                                                                        ).getTime() /
-                                                                            60000
+                                                                        ),
+                                                                        new Date(
+                                                                            drive.endDate
+                                                                        )
+                                                                    )
                                                                 );
                                                             case "Day":
                                                                 return drive.day;

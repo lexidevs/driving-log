@@ -12,23 +12,7 @@ import {
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { HomeScreenProps, DriveProps } from "./HomeStack";
 import { useFocusEffect } from "@react-navigation/native";
-
-function minutesToString(minutes: number): string {
-    // TODO: move to a utils file
-    /*
-    Equivalent to: (assuming number is an integer) 
-    if (minutes % 60 == 0) {
-        return `${Math.trunc(minutes / 60)}h`; // Return just `${hours}h`
-    }
-    else {
-        return `${Math.trunc(minutes / 60)}h ${Math.trunc(minutes % 60)}m`; // Return `${hours}h ${minutes}m`
-    }
-    */
-
-    return `${Math.trunc(minutes / 60)}h${
-        Math.trunc(minutes % 60) == 0 ? "" : ` ${Math.trunc(minutes % 60)}m`
-    }`;
-}
+import { minutesToString, datesToMinutes } from "../../utils";
 
 function HomeScreen({ navigation }: HomeScreenProps) {
     const [drives, setDrives] = React.useState<DriveProps[]>([]);
@@ -58,16 +42,21 @@ function HomeScreen({ navigation }: HomeScreenProps) {
     );
 
     const driveTime = drives.reduce((acc, drive) => {
-        const startDate = new Date(drive.startDate);
-        const endDate = new Date(drive.endDate);
-        return acc + (endDate.getTime() - startDate.getTime()) / 60000;
+        return (
+            acc +
+            datesToMinutes(new Date(drive.startDate), new Date(drive.endDate))
+        );
     }, 0);
 
     const nightDriveTime = drives.reduce((acc, drive) => {
         if (!drive.day) {
-            const startDate = new Date(drive.startDate);
-            const endDate = new Date(drive.endDate);
-            return acc + (endDate.getTime() - startDate.getTime()) / 60000;
+            return (
+                acc +
+                datesToMinutes(
+                    new Date(drive.startDate),
+                    new Date(drive.endDate)
+                )
+            );
         }
         return acc;
     }, 0);
