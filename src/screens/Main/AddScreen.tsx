@@ -1,5 +1,5 @@
 import * as React from "react";
-import { View, StyleSheet, ScrollView } from "react-native";
+import { View, StyleSheet, ScrollView, Alert } from "react-native";
 import {
     TextInput,
     Appbar,
@@ -22,8 +22,8 @@ export default function AddScreen({ navigation }: AddScreenProps) {
     const [startDate, setStartDate] = React.useState(new Date(Date.now()));
     const [endDate, setEndDate] = React.useState(new Date(Date.now()));
 
-    const [day, setDay] = React.useState(true);
-    const [weather, setWeather] = React.useState("Sunny");
+    const [day, setDay] = React.useState(true); // todo: use geolookup to determine day/night
+    const [weather, setWeather] = React.useState("Sunny"); // todo: use geolookup to determine weather
     const [notes, setNotes] = React.useState("");
 
     const [startTimePickerVisible, setStartTimePickerVisible] = React.useState(
@@ -43,35 +43,42 @@ export default function AddScreen({ navigation }: AddScreenProps) {
                     icon="check"
                     onPress={() => {
                         // Save the drive
-                        AsyncStorage.getItem("drives").then((value) => {
-                            // TODO: potential race condition?? unsure
-                            // TODO: add validation
-                            let exportedStartDate = new Date(startDate);
-                            let exportedEndDate = new Date(endDate);
+                        try {
+                            AsyncStorage.getItem("drives").then((value) => {
+                                // TODO: potential race condition?? unsure
+                                // TODO: add validation
+                                let exportedStartDate = new Date(startDate);
+                                let exportedEndDate = new Date(endDate);
 
-                            exportedStartDate.setSeconds(0);
-                            exportedStartDate.setMilliseconds(0);
-                            exportedEndDate.setSeconds(0);
-                            exportedEndDate.setMilliseconds(0);
+                                exportedStartDate.setSeconds(0);
+                                exportedStartDate.setMilliseconds(0);
+                                exportedEndDate.setSeconds(0);
+                                exportedEndDate.setMilliseconds(0);
 
-                            let drives = [];
-                            if (value) {
-                                drives = JSON.parse(value);
-                            }
-                            drives.push({
-                                startDate: exportedStartDate.toISOString(),
-                                endDate: exportedEndDate.toISOString(),
-                                day,
-                                weather,
-                                notes,
-                                uuid: uuidv4(),
+                                let drives = [];
+                                if (value) {
+                                    drives = JSON.parse(value);
+                                }
+                                drives.push({
+                                    startDate: exportedStartDate.toISOString(),
+                                    endDate: exportedEndDate.toISOString(),
+                                    day,
+                                    weather,
+                                    notes,
+                                    uuid: uuidv4(),
+                                });
+                                AsyncStorage.setItem(
+                                    "drives",
+                                    JSON.stringify(drives)
+                                ).then(() => {
+                                    navigation.goBack();
+                                });
                             });
-                            AsyncStorage.setItem(
-                                "drives",
-                                JSON.stringify(drives)
-                            );
-                        });
-                        navigation.navigate("Home");
+                        } catch
+                        (error) {
+                            Alert.alert("Something went wrong! Please try again, and make sure the drive wasn't saved twice.");
+                            // TODO: prevent double saving, maybe add idempotency token
+                        }
                     }}
                 />
             </Appbar.Header>
@@ -233,12 +240,12 @@ export default function AddScreen({ navigation }: AddScreenProps) {
                                     weather === "Sunny"
                                         ? "weather-sunny"
                                         : weather === "Raining"
-                                        ? "weather-pouring"
-                                        : weather === "Snowing"
-                                        ? "weather-snowy"
-                                        : weather === "Foggy"
-                                        ? "weather-fog"
-                                        : "weather-sunny"
+                                            ? "weather-pouring"
+                                            : weather === "Snowing"
+                                                ? "weather-snowy"
+                                                : weather === "Foggy"
+                                                    ? "weather-fog"
+                                                    : "weather-sunny"
                                 }
                                 containerStyle={[
                                     styles.attrContainer,

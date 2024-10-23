@@ -14,7 +14,7 @@ import { expo } from "../../app.json";
 import { LengthPickerModal } from "../components/time/LengthPickerModal";
 
 export default function SettingsScreen() {
-    console.log("rendering!");
+    // console.log("rendering!");
 
     const [isLoading, setIsLoading] = React.useState(true);
 

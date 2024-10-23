@@ -38,6 +38,8 @@ function HomeScreen({ navigation }: HomeScreenProps) {
                         );
                     });
 
+                    // TODO: maybe run this only once, instead of doing the computationally expensive sort every time
+
                     for (let drive of parsedDrives) {
                         if (!drive.uuid) {
                             drive.uuid = uuidv4();
