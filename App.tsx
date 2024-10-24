@@ -5,6 +5,9 @@ import * as React from "react";
 import App from "./src";
 import { SafeAreaProvider } from "react-native-safe-area-context";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import { polyfillWebCrypto } from 'expo-standard-web-crypto';
+
+polyfillWebCrypto();
 
 export default function Main() {
     // Set default values for preferences
